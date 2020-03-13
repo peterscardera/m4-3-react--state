@@ -68,7 +68,7 @@ const Typeahead = ({
                                 return;
                             }
 
-                            // Arrows should shift between the available suggestions.
+                            // Arrows should shift between the available suggestion`s.
                             // We use arrow keys instead of `tab` so that keyboard users can
                             // choose to either enter the list of suggestions, or tab to the
                             // rest of the page.

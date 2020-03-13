@@ -12,8 +12,8 @@ State is _dynamic data_. Things that change.
 
 ```jsx live=true
 const Counter = () => {
-  const [count, setCount] = React.useState(0);
-
+  const [count, setCount] = React.useState(0);// the 0 is the initial value
+// array 1st what we are naming the variable and second is the function
   return (
     <>
       <p>Count: {count}</p>
@@ -49,6 +49,11 @@ const setValue = valueState[1];
 
 # `useState`
 
+** the function will change the state we shouldnt re-declare the variable value.
+
+When theres a change in state it will re-render the whole componant
+
+
 "useState" is a **React hook**.
 
 Hooks are way of "hooking into" React's abilities, like managing state.
@@ -78,6 +83,7 @@ This is why the values on the screen change.
 
 # Forms in React
 
+import React { useState } from Reack
 ---
 
 `value` and `onChange`
@@ -85,13 +91,13 @@ This is why the values on the screen change.
 ```jsx live=true
 const Name = () => {
   const [name, setName] = React.useState('');
-
+//setName the set parrt is good practice
   return (
     <div style={{ fontSize: 32 }}>
       <input
         type="text"
         value={name}
-        onChange={ev => {
+        onChange={ev => { //ev or e or event 
           setName(ev.target.value);
         }}
         style={{ fontSize: 32 }}
@@ -171,6 +177,7 @@ function SomeComponent() {
 
   return (
     <input
+    //placeholder={thing}
       value={thing}
       onChange={(ev) =>
         setThing(
@@ -197,7 +204,7 @@ function SomeComponent() {
     <label>
       <input
         type="checkbox"
-        checked={agreed}
+        checked={agreed} // false on first loand
         onChange={(ev) =>
           setAgreed(!agreed)
         }
@@ -216,19 +223,20 @@ function SomeComponent() {
 What happens when you want to share state between components?
 
 ---
+//we want both to share date
 
 ```jsx
 const App = () => {
   return (
     <>
       <SearchInput />
-      <SearchResults />
+      <SearchResults /> //doenst have acces to input at the moment
     </>
   )
 }
 
 const SearchInput = () => {
-  const [searchTerm, setSearchTerm] = React.useState('');
+  const [searchTerm, setSearchTerm] = React.useState(''); 
 
   return (
     <input
@@ -245,6 +253,51 @@ const SearchResults = () => {
   // ??
 }
 ```
+_______SHOULD BE LIKE FOLLOWS INSTEAD_________
+
+```jsx
+const App = () => {
+    const [searchTerm, setSearchTerm] = React.useState('');
+  return (
+    <>
+      <SearchInput
+      searchTerm={searchTerms}
+      setSearchTerm={setSearchTerm}
+       />
+      <SearchResults />
+    </>
+  )
+}
+//can only pass from parent to child and not from siblings
+//accepting them here
+const SearchInput = ({searchTerm, setSearchTerm}) => {
+  // const [searchTerm, setSearchTerm] = React.useState('');
+  return (
+    <input
+      type="text"
+      value={searchTerm}
+      onChange={(ev) => {
+        setSearchTerm(ev.target.value);
+      }}
+    />
+  );
+}
+const SearchResults = () => {
+  **?? Doesnt have access to searchTerms. 
+}
+```
+
+
+
+
+
+
+
+
+\
+
+
+
 
 ---
 
@@ -260,7 +313,7 @@ Lift state up in the following examples
 
 ```jsx live=true
 const Counter = () => {
-  const [count, setCount] = React.useState(0);
+  //const [count, setCount] = React.useState(0); //removed
 
   return (
     <>
@@ -271,12 +324,16 @@ const Counter = () => {
   )
 };
 
-const App = () => {
+const App = () => { 
+  const [count, setCount] = React.useState(0);
+
   return (
     <>
       The current count is: ???
 
-      <Counter />
+      <Counter
+       count={count}
+       setCount={setCount} />
     </>
   )
 }
@@ -288,7 +345,7 @@ render(<App />)
 
 ```jsx live=true
 const FavouriteFood = () => {
-  const [food, setFood] = React.useState('');
+ // const [food, setFood] = React.useState(''); // removed and passed to the parent 
 
   return (
     <>
@@ -297,7 +354,7 @@ const FavouriteFood = () => {
           type="radio"
           name="food"
           value="pizza"
-          checked={food === 'pizza'}
+          //checked={food === 'pizza'} we chouldnt set it outselves
           onChange={() => setFood('pizza')}
         />
         Pizza
@@ -307,7 +364,7 @@ const FavouriteFood = () => {
           type="radio"
           name="food"
           value="broccoli"
-          checked={food === 'broccoli'}
+          //checked={food === 'broccoli'}
           onChange={() => setFood('broccoli')}
         />
         Broccoli
@@ -317,9 +374,11 @@ const FavouriteFood = () => {
 };
 
 const App = () => {
+  const [food, setFood] = React.useState('');
   return (
     <>
-      My favourite food is: ???
+      My favourite food is: 
+      <FavouriteFood food={food} setFood={setFood}>
       <br /><br />
       <FavouriteFood />
     </>

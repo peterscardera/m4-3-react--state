@@ -1,4 +1,4 @@
-export const categories = {
+ export const categories = {
     'sci-fi-fantasy': {
         id: 'sci-fi-fantasy',
         name: 'Science Fiction & Fantasy',
